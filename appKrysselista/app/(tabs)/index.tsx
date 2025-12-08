@@ -1,98 +1,192 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import React, { useEffect, useState } from "react";
+import { View, Text, FlatList, ActivityIndicator, Alert, TouchableOpacity, StyleSheet } from "react-native";
+import { getChildren, setChildStatus } from "@/api/childApi";
+import ChildCard from "@/components/childCard";
+import { useAuth } from "@/providers/authProvider";
+import { Child } from "@/types/child";
+import { signOut } from "firebase/auth";
+import { auth } from "@/firebaseConfig";
+import { router } from "expo-router";
 
-import { HelloWave } from '@/components/hello-wave';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
+export default function CheckinList() {
+  const { kindergardenId, user, setUser, setKindergardenId } = useAuth();
+  console.log("Current kindergardenId:", kindergardenId);
+
+
+  const [children, setChildren] = useState<Child[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!kindergardenId) return;
+
+    (async () => {
+      const data = await getChildren(kindergardenId);
+      setChildren(data as Child[]);
+      setLoading(false);
+    })();
+  }, [kindergardenId]);
+
+  const handleLogout = async () => {
+    Alert.alert(
+      "Logg ut",
+      "Er du sikker på at du vil logge ut?",
+      [
+        {text: "Avbryt", style: "cancel"},
+        {
+          text: "Logg ut",
+          style: "destructive",
+          onPress: async () => {
+            try {
+              await signOut(auth);
+              setUser(null);
+              setKindergardenId("");
+              router.replace("../index");
+            } catch (error) {
+              Alert.alert("Feil", "Kunne ikke logge ut");
+            }
+          }
+        }
+      ]
+    )
+  }
+
+  if(loading) {
+    return <ActivityIndicator style={{ marginTop: 100 }} size={"large"} />
+  }
+
+  return (
+    <View style={{ flex: 1, paddingTop: 72, backgroundColor: "#f5f5f5" }}>
+      <View style={styles.header}>
+        <Text style={styles.title}>
+          Krysseliste
+        </Text>
+        <TouchableOpacity onPress={handleLogout}>
+          <Text style={styles.logoutButtonText}>Logg ut</Text>
+        </TouchableOpacity>
+      </View>
+      
+
+      <FlatList
+        data={children}
+        numColumns={2}
+        keyExtractor={(item) => item.id}
+        contentContainerStyle={{ paddingBottom: 40 }}
+        renderItem={({ item }) => (
+          <ChildCard
+            child={item}
+            onStatus={async (status) => {
+              if (!user?.uid) return;
+
+              await setChildStatus(item.id, status, user.uid, kindergardenId);
+
+              setChildren((prev) => 
+                prev.map((c) => 
+                  c.id === item.id ? { ...c, status } : c
+                )
+              );
+            }}
+          />
+        )}
+      />
+    </View>
+  )
+}
+
+
+
+
+const styles = StyleSheet.create({
+  header: {
+    flexDirection: "row",
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
+    marginBottom: 10,
+  },
+  title: {
+    fontSize: 26,
+    fontWeight: "bold",
+  },
+  logoutButtonText: {
+    color: '#000',
+    fontSize: 16,
+  },
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*import { StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { Link } from 'expo-router';
+import { signOut } from 'firebase/auth';
+import { auth } from '@/firebaseConfig';
+import { router } from 'expo-router';
 
 export default function HomeScreen() {
-  return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <Link href="/modal">
-          <Link.Trigger>
-            <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-          </Link.Trigger>
-          <Link.Preview />
-          <Link.Menu>
-            <Link.MenuAction title="Action" icon="cube" onPress={() => alert('Action pressed')} />
-            <Link.MenuAction
-              title="Share"
-              icon="square.and.arrow.up"
-              onPress={() => alert('Share pressed')}
-            />
-            <Link.Menu title="More" icon="ellipsis">
-              <Link.MenuAction
-                title="Delete"
-                icon="trash"
-                destructive
-                onPress={() => alert('Delete pressed')}
-              />
-            </Link.Menu>
-          </Link.Menu>
-        </Link>
+  const handleLogout = async () => {
+    Alert.alert(
+      'Logg ut',
+      'Er du sikker på at du vil logge ut?',
+      [
+        {
+          text: 'Avbryt',
+          style: 'cancel',
+        },
+        {
+          text: 'Logg ut',
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              await signOut(auth);
+              router.replace('/');
+            } catch (error) {
+              Alert.alert('Feil', 'Kunne ikke logge ut');
+            }
+          },
+        },
+      ]
+    );
+  };
 
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+  return (
+    <ThemedView style={styles.container}>
+      <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+        <ThemedText style={styles.logoutButtonText}>Logg ut</ThemedText>
+      </TouchableOpacity>
+      
+      <ThemedText type="title">Velkommen til Krysselista</ThemedText>
+      {/* Legg til ditt eget innhold her *//*}
+    </ThemedView>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
+  container: {
+    flex: 1,
     alignItems: 'center',
-    gap: 8,
+    justifyContent: 'center',
+    padding: 20,
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
+  logoutButton: {
     position: 'absolute',
+    top: 50,
+    right: 20,
+    padding: 10,
+  },
+  logoutButtonText: {
+    color: '#000',
+    fontSize: 16,
   },
 });
+*/
