@@ -39,15 +39,15 @@ export default function ChildCard({ child, onStatus }: Props) {
             </Text>
             <View style={styles.actions}>
                 <TouchableOpacity onPress={() => onStatus("inn")}>
-                    <FontAwesome5 name="check-circle" size={26} color="green" />
+                    <FontAwesome5 name="check-circle" size={26} color="#546856" />
                 </TouchableOpacity>
                 
                 <TouchableOpacity onPress={() => onStatus("ut")}>
-                    <AntDesign name="close-circle" size={24} color="red" />
+                    <AntDesign name="close-circle" size={24} color="#B82929" />
                 </TouchableOpacity>
 
-                <TouchableOpacity onPress={() => onStatus("fravaer")}>
-                    <FontAwesome5 name="minus-circle" size={26} color="pink" />
+                <TouchableOpacity onPress={() => router.push({ pathname: "/chat"})}>
+                    <AntDesign name="comment" size={24} color="#6B85A5" />
                 </TouchableOpacity>
             </View>
         </View>
@@ -58,8 +58,10 @@ export default function ChildCard({ child, onStatus }: Props) {
 const styles = StyleSheet.create({
     card: {
         width: "45%",
-        backgroundColor: "#fff",
+        backgroundColor: "#CBDAED",
         padding: 12,
+        //borderWidth: 1,
+        borderColor: "#546856",
         borderRadius: 10,
         margin: "2.5%",
         alignItems: "center",
@@ -74,12 +76,13 @@ const styles = StyleSheet.create({
     },
     name: {
         fontWeight: "bold",
+        color: "#546856",
     },
     statusRow: {
         marginVertical: 5,
     },
     status: {
-        color: "#666",
+        color: "#546856",
     },
     actions: {
         flexDirection: "row",

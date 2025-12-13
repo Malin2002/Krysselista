@@ -55,7 +55,7 @@ export default function CheckinList() {
   }
 
   return (
-    <View style={{ flex: 1, paddingTop: 72, backgroundColor: "#f5f5f5" }}>
+    <View style={styles.mainContainer}>
       <View style={styles.header}>
         <Text style={styles.title}>
           Krysseliste
@@ -77,7 +77,7 @@ export default function CheckinList() {
             onStatus={async (status) => {
               if (!user?.uid) return;
 
-              await setChildStatus(item.id, status, user.uid, kindergardenId);
+              await setChildStatus(item.id, status, user.uid);
 
               setChildren((prev) => 
                 prev.map((c) => 
@@ -96,6 +96,11 @@ export default function CheckinList() {
 
 
 const styles = StyleSheet.create({
+  mainContainer: {
+    flex: 1,
+    paddingTop: 72,
+    backgroundColor: "#E2EDFB",
+  },
   header: {
     flexDirection: "row",
     alignItems: 'center',
@@ -106,9 +111,10 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 26,
     fontWeight: "bold",
+    color: "#546856",
   },
   logoutButtonText: {
-    color: '#000',
+    color: '#546856',
     fontSize: 16,
   },
 });

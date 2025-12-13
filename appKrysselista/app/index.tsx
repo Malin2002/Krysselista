@@ -111,22 +111,6 @@ export default function Index() {
             {barnehage ? barnehage.name : "Velg barnehage"}
           </ThemedText>
         </TouchableOpacity>
-        {/*<View style={styles.inputContainer}>
-          <TextInput
-            style={styles.input}
-            placeholder="Velg barnehage"
-            placeholderTextColor="#999"
-            value={barnehage}
-            onChangeText={setBarnehage}
-            editable={false}
-            pointerEvents="none"
-          />
-          <TouchableOpacity
-            style={styles.velgButton}
-            onPress={handleVelgBarnehage}>
-            <ThemedText style={styles.velgButtonText}>Velg</ThemedText>
-          </TouchableOpacity>
-        </View>*/}
 
         {/* Brukernavn (e-post) felt */}
         <TextInput
@@ -187,18 +171,18 @@ export default function Index() {
       <Modal visible={showPicker} transparent animationType="fade">
         <View style={styles.modalOverlay}>
           <View style={styles.modalBox}>
-            <ThemedText type='title' style={{ marginBottom: 10 }}>Velg barnehage</ThemedText>
+            <ThemedText type='title' style={{ marginBottom: 10, color: "#546856" }}>Velg barnehage</ThemedText>
             <FlatList
               data={barnehager}
               keyExtractor={(item) => item.id}
               renderItem={({ item }) => (
                 <TouchableOpacity style={styles.modalItem} onPress={() => handleVelgBarnehage(item)}>
-                  <ThemedText>{item.name}</ThemedText>
+                  <ThemedText style={{ color: "#546856", borderBottomWidth: 1, borderColor: "#546856" }}>{item.name}</ThemedText>
                 </TouchableOpacity>
               )}
             />
             <TouchableOpacity onPress={() => setShowPicker(false)}>
-              <ThemedText style={{ textAlign: "center", marginTop: 10}}>Avbryt</ThemedText>
+              <ThemedText style={{ textAlign: "center", marginTop: 10, color: "#546856" }}>Avbryt</ThemedText>
             </TouchableOpacity>
           </View>
         </View>
@@ -213,6 +197,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
+    backgroundColor: "#E2EDFB"
   },
   content: {
     width: '100%',
@@ -221,6 +206,7 @@ const styles = StyleSheet.create({
   title: {
     marginBottom: 32,
     textAlign: 'center',
+    color: "#546856",
   },
   inputContainer: {
     flexDirection: 'row',
@@ -231,10 +217,10 @@ const styles = StyleSheet.create({
     padding: 16,
     borderRadius: 12,
     borderWidth: 2,
-    borderColor: '#E0E0E0',
+    borderColor: '#546856',
     backgroundColor: '#F5F5F5',
     fontSize: 16,
-    color: '#000',
+    color: '#546856',
     marginBottom: 16,
     minHeight: 50,
   },
@@ -254,7 +240,7 @@ const styles = StyleSheet.create({
     width: '100%',
     padding: 16,
     borderRadius: 12,
-    backgroundColor: '#0a7ea4',
+    backgroundColor: '#6B85A5',
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 12,
@@ -268,7 +254,7 @@ const styles = StyleSheet.create({
   },
   modalOverlay: {
     flex: 1,
-    backgroundColor: "rgba(0,0,0,0.5)",   // litt mørkere for tydelig fokus
+    backgroundColor: "#000000aa",   // litt mørkere for tydelig fokus
     justifyContent: "center",
     alignItems: "center",
     padding: 20,
@@ -278,7 +264,7 @@ const styles = StyleSheet.create({
     width: "100%",
     maxWidth: 380,
     maxHeight: "70%",
-    backgroundColor: "#fff",
+    backgroundColor: "#E2EDFB",
     borderRadius: 16,
     padding: 20,
     shadowColor: "#000",
