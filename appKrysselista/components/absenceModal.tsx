@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { View, Text, Modal, TextInput, Button, StyleSheet } from "react-native";
 import { addAbsence } from "@/api/childApi";
-import { Timestamp } from "firebase/firestore";
 
 interface Props {
     childId: string;

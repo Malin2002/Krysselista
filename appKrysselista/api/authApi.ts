@@ -3,7 +3,7 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 import { getUser } from "./userApi";
 
-export async function logIn(email: string, password: string, barnehageId: string) {
+export async function logIn(email: string, password: string) {
     const credentials = await signInWithEmailAndPassword(auth, email, password);
     const user = credentials.user;
 
@@ -17,10 +17,10 @@ export async function logIn(email: string, password: string, barnehageId: string
         user,
         profile,
     };
-    
-    
-    
-    {/*const uid = credentials.user.uid;
+}
+
+
+{/*const uid = credentials.user.uid;
 
     const userRef = doc(db, "users", uid);
     const snap = await getDoc(userRef);
@@ -33,4 +33,3 @@ export async function logIn(email: string, password: string, barnehageId: string
         uid,
         ...snap.data(),
     };*/}
-}

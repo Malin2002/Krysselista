@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, FlatList, ActivityIndicator, Alert, TouchableOpacity, StyleSheet } from "react-native";
-import { getChildren, setChildStatus } from "@/api/childApi";
+import { getChildren, setChildStatus, getAbsence } from "@/api/childApi";
 import ChildCard from "@/components/childCard";
 import { useAuth } from "@/providers/authProvider";
 import { Child } from "@/types/child";
@@ -76,12 +76,13 @@ export default function CheckinList() {
             child={item}
             onStatus={async (status) => {
               if (!user?.uid) return;
+              if (item.hasAbsenceToday) return;
 
               await setChildStatus(item.id, status, user.uid);
 
               setChildren((prev) => 
                 prev.map((c) => 
-                  c.id === item.id ? { ...c, status } : c
+                  c.id === item.id ? { ...c, hasAbsenceToday: true } : c
                 )
               );
             }}

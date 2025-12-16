@@ -4,14 +4,11 @@ export interface Child {
     kindergardenId: string;
     imageUrl?: string;
     status: "inn" | "ut" | "fravaer";
+    hasAbsenceToday?: boolean;
     importantInfo?: string;
     health?: {
         allergies?: string[];
         medicine?: string[];
     };
-    guardians?: {
-        guardian1: string;
-        guardian2: string;
-    };
-    gallery?: string[];
+    guardians?: string[];
 }

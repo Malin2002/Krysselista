@@ -3,6 +3,7 @@ export interface User {
     kindergardenId: string;
     name: string;
     email: string;
+    phone: string;
     children: string[];
     role: "ansatt" | "foresatt";
 }

@@ -5,10 +5,15 @@ import { HapticTab } from '@/components/haptic-tab';
 import { IconSymbol } from '@/components/ui/icon-symbol';
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
+import { useAuth } from '@/providers/authProvider';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
+  const { appUser } = useAuth();
 
+  const isForesatt = appUser?.role === "foresatt";
+  const homeScreen = appUser?.role === "foresatt" ? `[childId]?childId=${appUser.children[0]}` : "index";
+  const initialRoutename = isForesatt ? "child/[childId]" : "index";
   return (
     <Tabs
       screenOptions={{
@@ -16,13 +21,32 @@ export default function TabLayout() {
         headerShown: false,
         tabBarButton: HapticTab,
       }}>
-      <Tabs.Screen
-        name="index"
+
+      {isForesatt ? (
+        <Tabs.Screen
+          name="child/[childId]"
+          options={{
+            title: 'Mitt barn',
+            tabBarIcon: ({ color }) => <IconSymbol size={28} name="person.fill" color={color} />,
+            //initialParams: { childId: appUser.children[0] },
+          }}
+        />
+      ) : (
+        <Tabs.Screen
+          name="index"
+          options={{
+            title: 'Krysselista',
+            tabBarIcon: ({ color }) => <IconSymbol size={28} name="person.2.fill" color={color} />,
+          }}
+        />
+      )}
+      {/*<Tabs.Screen
+        name={homeScreen}
         options={{
           title: 'Hjem',
           tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
         }}
-      />
+      />*/}
       <Tabs.Screen
         name="kalender"
         options={{
