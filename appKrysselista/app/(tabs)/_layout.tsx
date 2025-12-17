@@ -12,60 +12,69 @@ export default function TabLayout() {
   const { appUser } = useAuth();
 
   const isForesatt = appUser?.role === "foresatt";
-  const homeScreen = appUser?.role === "foresatt" ? `[childId]?childId=${appUser.children[0]}` : "index";
-  const initialRoutename = isForesatt ? "child/[childId]" : "index";
+  const firstChildId = appUser?.children?.[0];
   return (
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
         headerShown: false,
         tabBarButton: HapticTab,
-      }}>
-
-      {isForesatt ? (
-        <Tabs.Screen
-          name="child/[childId]"
-          options={{
-            title: 'Mitt barn',
-            tabBarIcon: ({ color }) => <IconSymbol size={28} name="person.fill" color={color} />,
-            //initialParams: { childId: appUser.children[0] },
-          }}
-        />
-      ) : (
-        <Tabs.Screen
-          name="index"
-          options={{
-            title: 'Krysselista',
-            tabBarIcon: ({ color }) => <IconSymbol size={28} name="person.2.fill" color={color} />,
-          }}
-        />
-      )}
-      {/*<Tabs.Screen
-        name={homeScreen}
+      }}
+    >
+      <Tabs.Screen
+        name="index"
         options={{
-          title: 'Hjem',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+          title: "Krysselista",
+          tabBarIcon: ({ color }) => (
+            <IconSymbol size={28} name="person.2.fill" color={color} />
+          ),
+          href: isForesatt ? null : "/(tabs)",
         }}
-      />*/}
+      />
+
+      {/* Barn – KUN foresatte */}
+      <Tabs.Screen
+        name="child/[childId]"
+        options={{
+          title: "Mitt barn",
+          tabBarIcon: ({ color }) => (
+            <IconSymbol size={28} name="person.fill" color={color} />
+          ),
+          href: isForesatt && firstChildId 
+          ? {
+              pathname: "/(tabs)/child/[childId]",
+              params: { childId: firstChildId },
+          } : null,
+        }}
+      />
+
       <Tabs.Screen
         name="kalender"
         options={{
-          title: 'Kalender',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="calendar" color={color} />,
+          title: "Kalender",
+          tabBarIcon: ({ color }) => (
+            <IconSymbol size={28} name="calendar" color={color} />
+          ),
         }}
       />
+
       <Tabs.Screen
         name="chat"
         options={{
-          title: 'Chat',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="message.fill" color={color} />,
+          title: "Chat",
+          tabBarIcon: ({ color }) => (
+            <IconSymbol size={28} name="message.fill" color={color} />
+          ),
         }}
       />
+
       <Tabs.Screen
         name="varsling"
         options={{
-          title: 'Varsling',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="bell.fill" color={color} />,
+          title: "Varsling",
+          tabBarIcon: ({ color }) => (
+            <IconSymbol size={28} name="bell.fill" color={color} />
+          ),
         }}
       />
     </Tabs>

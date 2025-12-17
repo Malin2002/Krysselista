@@ -171,7 +171,7 @@ export default function ChildProfile() {
             </Modal>
 
             <Image
-                source={child.imageUrl ? { uri: child.imageUrl } : require("../../assets/images/icon.png")}
+                source={child.imageUrl ? { uri: child.imageUrl } : require("../../../assets/images/icon.png")}
                 style={styles.image}
             />
             <Text style={styles.name}>{child.name}</Text>

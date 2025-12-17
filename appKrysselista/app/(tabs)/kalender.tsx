@@ -147,12 +147,12 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
     marginTop: 64,
+    backgroundColor: "#DDF3DF",
   },
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "center",
-  },
+    alignItems: "center",  },
   headerText: {
     fontSize: 20,
     fontWeight: "bold",
@@ -174,7 +174,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     borderWidth: 0.4,
-    borderColor: "#ccc",
+    borderColor: "#546856aa",
     position: "relative",
   },
   dayNumber: {
@@ -202,6 +202,8 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 22,
     borderTopRightRadius: 22,
     padding: 20,
+    borderWidth: 1,
+    borderColor: "#546856",
   },
   infoTitle: {
     fontSize: 18,
@@ -241,79 +243,7 @@ const styles = StyleSheet.create({
   }
 });
 
-
-
-
-/*<View style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={prevMonth}>
-          <Text>{"<"}</Text>
-        </TouchableOpacity>
-        <Text style={styles.headerText}>{monthId}</Text>
-        <TouchableOpacity onPress={nextMonth}>
-          <Text>{">"}</Text>
-        </TouchableOpacity>
-      </View>
-
-      <View style={styles.grid}>
-        {Array.from({ length: daysInMonth }, (_, i) => {
-          const day = i + 1;
-          return (
-            <TouchableOpacity
-              key={day}
-              style={styles.day}
-              onPress={() => setSelectedDate(`${monthId}-${String(day).padStart(2, "0")}`)}
-            >
-              <Text>{day}</Text>
-              {hasEvent(day) && <View style={styles.dot} />}
-            </TouchableOpacity>
-          );
-        })}
-      </View>
-
-      <Modal visible={!!selectedDate} transparent animationType="slide">
-        <View style={styles.modal}>
-          <View style={styles.modalInner}>
-            <Text style={styles.modalTitle}>{selectedDate}</Text>
-
-            {events
-              .filter((e) => e.id === selectedDate)
-              .map((e, i) => (
-                <View key={i} style={styles.eventBox}>
-                  <Text style={styles.eventTitle}>{e.title}</Text>
-
-                  <Text style={styles.timeText}>
-                    {e.start} - {e.end}
-                  </Text>
-
-                  <Text>{e.description}</Text>
-                </View>
-            ))}
-
-            <TouchableOpacity onPress={() => setSelectedDate(null)}>
-              <Text style={{ marginTop: 20, color: "blue" }}>Lukk</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
-    </View>*/
-
-    /*
-    modal: {
-    flex: 1,
-    backgroundColor: "#000000aa",
-    justifyContent: "flex-end",
-  },
-  modalInner: {
-    backgroundColor: "#FFFFFF",
-    padding: 20,
-    height: "50%",
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-  },
-  modalTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
-    marginBottom: 10,
-    color: "#546856",
-  }, */
+// Mørk grønn: #546856
+//Mørk blå: #6B85A5
+//Lys grønn: #DDF3DF
+//Lys blå: #E2EDFB / #CBDAED

@@ -13,15 +13,31 @@ export default function CheckinList() {
   console.log("Current kindergardenId:", kindergardenId);
 
 
-  const [children, setChildren] = useState<Child[]>([]);
+  const [children, setChildren] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+
+  const today = new Date().toISOString().split("T")[0];
 
   useEffect(() => {
     if (!kindergardenId) return;
 
     (async () => {
       const data = await getChildren(kindergardenId);
-      setChildren(data as Child[]);
+
+      const withAbsenceToday = await Promise.all(
+        data.map(async (child) => {
+          const absence = await getAbsence(child.id);
+
+          const hasToday = absence.some((a: any) => a.id === today);
+
+          return {
+            ...child,
+            hasAbsenceToday: hasToday,
+          };
+        })
+      );
+
+      setChildren(withAbsenceToday);
       setLoading(false);
     })();
   }, [kindergardenId]);
@@ -82,7 +98,7 @@ export default function CheckinList() {
 
               setChildren((prev) => 
                 prev.map((c) => 
-                  c.id === item.id ? { ...c, hasAbsenceToday: true } : c
+                  c.id === item.id ? { ...c, status } : c
                 )
               );
             }}

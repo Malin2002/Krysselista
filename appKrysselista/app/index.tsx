@@ -164,9 +164,22 @@ export default function Index() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: 20, backgroundColor: "#E2EDFB" },
-  content: { width: '100%', maxWidth: 400 },
-  title: { marginBottom: 32, textAlign: 'center', color: "#546856" },
+  container: { 
+    flex: 1, 
+    justifyContent: 'center', 
+    alignItems: 'center', 
+    padding: 20, 
+    backgroundColor: "#E2EDFB" 
+  },
+  content: { 
+    width: '100%', 
+    maxWidth: 400 
+  },
+  title: { 
+    marginBottom: 32, 
+    textAlign: 'center', 
+    color: "#546856" 
+  },
   input: {
     flex: 1,
     padding: 16,
@@ -179,12 +192,43 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     minHeight: 50,
   },
-  loginButton: { width: '100%', padding: 16, borderRadius: 12, backgroundColor: '#6B85A5', alignItems: 'center', justifyContent: 'center', marginTop: 12 },
-  loginButtonDisabled: { opacity: 0.6 },
-  loginButtonText: { color: '#fff', fontSize: 16 },
-  modalOverlay: { flex: 1, backgroundColor: "#000000aa", justifyContent: "center", alignItems: "center", padding: 20 },
-  modalBox: { width: "100%", maxWidth: 380, maxHeight: "70%", backgroundColor: "#E2EDFB", borderRadius: 16, padding: 20 },
-  modalItem: { paddingVertical: 14, paddingHorizontal: 12, borderBottomWidth: 1, borderBottomColor: "#eee" },
+  loginButton: { 
+    width: '100%', 
+    padding: 16, 
+    borderRadius: 12, 
+    backgroundColor: '#6B85A5', 
+    alignItems: 'center', 
+    justifyContent: 'center', 
+    marginTop: 12 
+  },
+  loginButtonDisabled: { 
+    opacity: 0.6 
+  },
+  loginButtonText: { 
+    color: '#fff', 
+    fontSize: 16 
+  },
+  modalOverlay: { 
+    flex: 1, 
+    backgroundColor: "#000000aa", 
+    justifyContent: "center", 
+    alignItems: "center", 
+    padding: 20 
+  },
+  modalBox: { 
+    width: "100%", 
+    maxWidth: 380, 
+    maxHeight: "70%", 
+    backgroundColor: "#E2EDFB", 
+    borderRadius: 16, 
+    padding: 20 
+  },
+  modalItem: { 
+    paddingVertical: 14, 
+    paddingHorizontal: 12, 
+    borderBottomWidth: 1, 
+    borderBottomColor: "#eee" 
+  },
 });
 
 
