@@ -16,6 +16,14 @@ import {
     Timestamp,
 } from "firebase/firestore";
 
+//type for varsling
+type AddAbsenceOptions = {
+    kindergardenId: string;
+    childName?: string;
+    senderName?: string;
+    senderRole?: string;
+  };
+
 {/* HENT BARN */}
 export async function getChildren(kindergardenId: string) {
     const collectionRef = collection(db, "children");
@@ -57,7 +65,13 @@ export async function setChildStatus(
 
 
 {/* FRAVÆR */}
-export async function addAbsence(childId: string, reason: "syk" | "ferie" | "annet", date: string, note?: string) {
+export async function addAbsence(
+    childId: string, 
+    reason: "syk" | "ferie" | "annet", 
+    date: string, 
+    note?: string,
+    opts?: AddAbsenceOptions  // parameter til varsling
+    ) {
     const ref = doc(db, "children", childId, "attendance", date);
 
     await setDoc(ref, {
@@ -71,6 +85,21 @@ export async function addAbsence(childId: string, reason: "syk" | "ferie" | "ann
         status: "fravaer",
         hasAbsenceToday: true,
     });
+
+    if (opts?.kindergardenId) {
+        const notifId = `${childId}-${date}-fravaer`;
+        await setDoc(doc(db, "notifications", notifId), {
+            type: "fravaer",
+            targetRole: "ansatt",
+            kindergardenId: opts.kindergardenId,
+            title: `${opts.childName || "Barn"} er meldt fravær`,
+            subtitle: date,
+            message: note ? `Årsak: ${reason}. Notat: ${note}` : `Årsak: ${reason}.`,
+            timestamp: serverTimestamp(),
+            senderName: opts.senderName || "Foresatt",
+            senderRole: opts.senderRole || "foresatt",
+        });
+    }
 }
 
 export async function getAbsence(childId: string) {
@@ -91,15 +120,35 @@ export async function getSleep(childId: string) {
     return snap.docs.map((d) => ({id: d.id, ...d.data()}));
 }
 
-export async function addSleep(childId: string, startTime: string, endTime: string, date: string) {
+export async function addSleep(
+    childId: string, 
+    startTime: string, 
+    endTime: string, 
+    date: string,
+    opts?: AddAbsenceOptions 
+    ) {
     const ref = collection(db, "children", childId, "sleepLogs");
 
-    return await addDoc(ref, {
+    await addDoc(ref, {
         date,
         startTime,
         endTime,
         createdAt: serverTimestamp(),
     });
+
+    if (opts?.kindergardenId) {
+        await addDoc(collection(db, "notifications"), {
+            type: "soving",
+            targetRole: "foresatt",
+            kindergardenId: opts.kindergardenId,
+            title: `Søvnlogg for ${opts.childName || "barn"}`,
+            subtitle: date,
+            message: `Sov fra ${startTime} til ${endTime}`,
+            timestamp: serverTimestamp(),
+            senderName: opts.senderName || "Ansatt",
+            senderRole: opts.senderRole || "ansatt",
+        });
+    }
 }
 
 
@@ -112,16 +161,38 @@ export async function getFood(childId: string) {
     return snap.docs.map((d) => ({id: d.id, ...d.data()}));
 }
 
-export async function addFood(childId: string, meal: string, description: string, time: string, date: string ) {
+export async function addFood(
+    childId: string, 
+    meal: string, 
+    description: string, 
+    time: string, 
+    date: string,
+    opts?: AddAbsenceOptions  
+    ) {
     const ref = collection(db, "children", childId, "foodLogs");
 
-    return await addDoc(ref, {
+    await addDoc(ref, {
         date,
         meal,
         description,
         time,
         createdAt: serverTimestamp(),
     });
+
+     //varsel til foresatte om mat
+     if (opts?.kindergardenId) {
+        await addDoc(collection(db, "notifications"), {
+            type: "mat",
+            targetRole: "foresatt",
+            kindergardenId: opts.kindergardenId,
+            title: `Ny matlogg for ${opts.childName || "barn"}`,
+            subtitle: date,
+            message: `${meal}: ${description} (kl. ${time})`,
+            timestamp: serverTimestamp(),
+            senderName: opts.senderName || "Ansatt",
+            senderRole: opts.senderRole || "ansatt",
+        });
+    }
 }
 
 
@@ -138,13 +209,32 @@ export async function getGallery(childId: string): Promise<GalleryImage[]> {
     }));
 }
 
-export async function addImage(childId: string, imageUrl: string) {
+export async function addImage(
+    childId: string, 
+    imageUrl: string,
+    opts?: AddAbsenceOptions 
+    ) {
     const ref = collection(db, "children", childId, "gallery");
 
-    return await addDoc(ref, {
+    await addDoc(ref, {
         imageUrl,
         uploadedAt: serverTimestamp(),
     });
+
+    //Varsel til foresatte om bilder
+    if (opts?.kindergardenId) {
+        await addDoc(collection(db, "notifications"), {
+            type: "bilde",
+            targetRole: "foresatt",
+            kindergardenId: opts.kindergardenId,
+            title: `Nytt bilde for ${opts.childName || "barn"}`,
+            subtitle: "",
+            message: "Se nytt bilde i galleriet.",
+            timestamp: serverTimestamp(),
+            senderName: opts.senderName || "Ansatt",
+            senderRole: opts.senderRole || "ansatt",
+        });
+    }
 }
 
 

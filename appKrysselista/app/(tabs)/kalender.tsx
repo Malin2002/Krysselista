@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet, Modal, ScrollView } from "rea
 import { getMonthEvents, addEvent } from "@/api/calendarApi";
 import AddEventModal from "@/components/addEventModal";
 import { CalendarEvent } from "@/types/calendarEvent";
+import { useAuth } from "@/providers/authProvider";
 
 export default function CalendarScreen() {
   const today = new Date();
@@ -20,6 +21,8 @@ export default function CalendarScreen() {
   useEffect(() => {
     loadEvents();
   }, [month, year]);
+
+  const { appUser, kindergardenId } = useAuth();
 
   const loadEvents = async () => {
     const data = await getMonthEvents(monthId);
@@ -132,7 +135,17 @@ export default function CalendarScreen() {
         onClose={() => setShowAddModal(false)}
         defaultDate={selectedDate}
         onSave={async (event: CalendarEvent) => {
-          await addEvent(monthId, event);
+          if (!kindergardenId) {
+            setShowAddModal(false);
+            return;
+          }
+        
+          await addEvent(monthId, event, {
+            kindergardenId,
+            senderName: appUser?.name,
+            senderRole: appUser?.role,
+          });
+        
           setShowAddModal(false);
           loadEvents();
         }}

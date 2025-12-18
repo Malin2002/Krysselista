@@ -15,6 +15,7 @@ import AddImageModal from "@/components/addImageModal";
 import { useAuth } from "@/providers/authProvider";
 import { signOut } from "firebase/auth";
 import { auth } from "@/firebaseConfig";
+import { addImage } from "@/api/childApi";
 
 export const options = {
     headerShown: false,
@@ -282,12 +283,20 @@ export default function ChildProfile() {
 
             <AbsenceModal
                 childId={childId}
+                childName={child.name}                    
+                kindergardenId={child.kindergardenId}     
+                senderName={appUser?.name}               
+                senderRole={appUser?.role} 
                 visible={absenceModalVisible}
                 onClose={() => setAbsenceModalVisible(false)}
                 onSaved={fetchData}
             />
             <AddFoodModal
                 childId={childId}
+                childName={child.name}                    
+                kindergardenId={child.kindergardenId}    
+                senderName={appUser?.name}               
+                senderRole={appUser?.role}
                 visible={selectedAction === "mat"}
                 onClose={() => setSelectedAction(null)}
                 defaultDate={today}
@@ -295,6 +304,10 @@ export default function ChildProfile() {
             />
             <AddSleepModal
                 childId={childId}
+                childName={child.name}                    
+                kindergardenId={child.kindergardenId}     
+                senderName={appUser?.name}                
+                senderRole={appUser?.role}
                 visible={selectedAction === "søvn"}
                 onClose={() => setSelectedAction(null)}
                 defaultDate={today}
@@ -303,7 +316,16 @@ export default function ChildProfile() {
             <AddImageModal
                 visible={selectedAction === "bilde"}
                 onClose={() => setSelectedAction(null)}
-                onSaved={fetchData}
+                onSaved={async (imageUrl) => {          
+                    await addImage(childId, imageUrl, {
+                        kindergardenId: child.kindergardenId,
+                        childName: child.name,
+                        senderName: appUser?.name,
+                        senderRole: appUser?.role,
+                    });
+                    setSelectedAction(null);
+                    fetchData();
+                }}
             />
         </ScrollView>
     );

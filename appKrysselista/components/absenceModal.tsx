@@ -4,12 +4,25 @@ import { addAbsence } from "@/api/childApi";
 
 interface Props {
     childId: string;
+    childName: string;             
+    kindergardenId: string;        
+    senderName?: string;            
+    senderRole?: string;
     visible: boolean;
     onClose: () => void;
     onSaved: () => void;
 }
 
-export default function AbsenceModal({ childId, visible, onClose, onSaved }: Props) {
+export default function AbsenceModal({ 
+    childId,
+    childName,                      
+    kindergardenId,                 
+    senderName,                     
+    senderRole, 
+    visible, 
+    onClose, 
+    onSaved 
+}: Props) {
     const [date, setDate] = useState("");
     const [reason, setReason] = useState("");
     const [note, setNote] = useState("");
@@ -17,7 +30,12 @@ export default function AbsenceModal({ childId, visible, onClose, onSaved }: Pro
     const handleSave = async () => {
         if(!date || !reason) return;
 
-        await addAbsence(childId, reason as "syk" | "ferie" | "annet", date, note);
+        await addAbsence(childId, reason as "syk" | "ferie" | "annet", date, note, {
+            kindergardenId,
+            childName,
+            senderName,
+            senderRole,
+        });        
         setDate("");
         setReason("");
         setNote("");

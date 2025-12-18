@@ -5,18 +5,37 @@ import { addSleep } from "@/api/childApi";
 
 type Props = {
     childId: string;
+    childName: string;             
+    kindergardenId: string;        
+    senderName?: string;            
+    senderRole?: string;
     visible: boolean;
     onClose: () => void;
     onSaved: () => void;
     defaultDate: string;
 };
 
-export default function AddSleepModal({ childId, visible, onClose, onSaved, defaultDate }: Props) {
+export default function AddSleepModal({ 
+    childId,
+    childName,                      
+    kindergardenId,                
+    senderName,                    
+    senderRole, 
+    visible, 
+    onClose, 
+    onSaved, 
+    defaultDate 
+}: Props) {
     const [startTime, setStartTime] = useState("");
     const [endTime, setEndTime] = useState("");
 
     const handleSave = async () => {
-        await addSleep( childId, startTime, endTime, defaultDate);
+        await addSleep(childId, startTime, endTime, defaultDate, {
+            kindergardenId,
+            childName,
+            senderName,
+            senderRole,
+        });
         setStartTime("");
         setEndTime("");
 

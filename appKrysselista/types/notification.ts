@@ -7,4 +7,6 @@ export interface Notification {
   timestamp?: any;
   senderName?: string;
   senderRole?: string;
+  targetRole?: string;       
+  kindergardenId?: string;
 }

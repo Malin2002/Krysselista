@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { View, Text, FlatList, ActivityIndicator, Alert, TouchableOpacity, StyleSheet } from "react-native";
 import { getChildren, setChildStatus, getAbsence } from "@/api/childApi";
 import ChildCard from "@/components/childCard";
@@ -6,7 +6,7 @@ import { useAuth } from "@/providers/authProvider";
 import { Child } from "@/types/child";
 import { signOut } from "firebase/auth";
 import { auth } from "@/firebaseConfig";
-import { router } from "expo-router";
+import { router, useFocusEffect } from "expo-router";
 
 export default function CheckinList() {
   const { kindergardenId, user, setUser, setKindergardenId } = useAuth();
@@ -17,6 +17,26 @@ export default function CheckinList() {
   const [loading, setLoading] = useState(true);
 
   const today = new Date().toISOString().split("T")[0];
+
+  const fetchChildren = async () => {
+    const data = await getChildren(kindergardenId);
+
+      const withAbsenceToday = await Promise.all(
+        data.map(async (child) => {
+          const absence = await getAbsence(child.id);
+
+          const hasToday = absence.some((a: any) => a.id === today);
+
+          return {
+            ...child,
+            hasAbsenceToday: hasToday,
+          };
+        })
+      );
+
+      setChildren(withAbsenceToday);
+      setLoading(false);
+  }
 
   useEffect(() => {
     if (!kindergardenId) return;
@@ -37,10 +57,21 @@ export default function CheckinList() {
         })
       );
 
+      /*const withAbsenceToday = data.map(child => ({
+        ...child as any,
+        hasAbsenceToday: (child as any).hasAbsenceToday || false,
+      }))*/
+
       setChildren(withAbsenceToday);
       setLoading(false);
     })();
   }, [kindergardenId]);
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchChildren();
+    }, [kindergardenId])
+  );
 
   const handleLogout = async () => {
     Alert.alert(

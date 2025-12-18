@@ -5,19 +5,38 @@ import { FoodItem } from "@/types/foodItem";
 
 type Props = {
     childId: string;
+    childName: string;              
+    kindergardenId: string;        
+    senderName?: string;            
+    senderRole?: string;
     visible: boolean;
     onClose: () => void;
     onSaved: () => void;
     defaultDate: string;
 }
 
-export default function AddFoodModal({ childId, visible, onClose, onSaved, defaultDate }: Props) {
+export default function AddFoodModal({ 
+    childId,
+    childName,                      
+    kindergardenId,                 
+    senderName,                     
+    senderRole, 
+    visible, 
+    onClose, 
+    onSaved, 
+    defaultDate 
+}: Props) {
     const [meal, setMeal] = useState("");
     const [description, setDescription] = useState("");
     const [time, setTime] = useState("");
 
     const handleSave = async () => {
-        await addFood( childId, meal, description, time, defaultDate);
+        await addFood(childId, meal, description, time, defaultDate, {
+            kindergardenId,
+            childName,
+            senderName,
+            senderRole,
+        });
         setMeal("");
         setDescription("");
         setTime("");
