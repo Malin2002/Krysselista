@@ -39,4 +39,3 @@ export async function addEvent(monthId: string, event: CalendarEvent, opts: AddE
     });
 }
 
-//date: string, title: string, description?: string, start?: string, end?: string

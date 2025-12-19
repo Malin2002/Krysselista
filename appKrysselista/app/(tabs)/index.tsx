@@ -3,7 +3,6 @@ import { View, Text, FlatList, ActivityIndicator, Alert, TouchableOpacity, Style
 import { getChildren, setChildStatus, getAbsence } from "@/api/childApi";
 import ChildCard from "@/components/childCard";
 import { useAuth } from "@/providers/authProvider";
-import { Child } from "@/types/child";
 import { signOut } from "firebase/auth";
 import { auth } from "@/firebaseConfig";
 import { router, useFocusEffect } from "expo-router";
@@ -56,11 +55,6 @@ export default function CheckinList() {
           };
         })
       );
-
-      /*const withAbsenceToday = data.map(child => ({
-        ...child as any,
-        hasAbsenceToday: (child as any).hasAbsenceToday || false,
-      }))*/
 
       setChildren(withAbsenceToday);
       setLoading(false);
@@ -166,81 +160,3 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*import { StyleSheet, TouchableOpacity, Alert } from 'react-native';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { signOut } from 'firebase/auth';
-import { auth } from '@/firebaseConfig';
-import { router } from 'expo-router';
-
-export default function HomeScreen() {
-  const handleLogout = async () => {
-    Alert.alert(
-      'Logg ut',
-      'Er du sikker på at du vil logge ut?',
-      [
-        {
-          text: 'Avbryt',
-          style: 'cancel',
-        },
-        {
-          text: 'Logg ut',
-          style: 'destructive',
-          onPress: async () => {
-            try {
-              await signOut(auth);
-              router.replace('/');
-            } catch (error) {
-              Alert.alert('Feil', 'Kunne ikke logge ut');
-            }
-          },
-        },
-      ]
-    );
-  };
-
-  return (
-    <ThemedView style={styles.container}>
-      <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-        <ThemedText style={styles.logoutButtonText}>Logg ut</ThemedText>
-      </TouchableOpacity>
-      
-      <ThemedText type="title">Velkommen til Krysselista</ThemedText>
-      {/* Legg til ditt eget innhold her *//*}
-    </ThemedView>
-  );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 20,
-  },
-  logoutButton: {
-    position: 'absolute',
-    top: 50,
-    right: 20,
-    padding: 10,
-  },
-  logoutButtonText: {
-    color: '#000',
-    fontSize: 16,
-  },
-});
-*/

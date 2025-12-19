@@ -18,18 +18,3 @@ export async function logIn(email: string, password: string) {
         profile,
     };
 }
-
-
-{/*const uid = credentials.user.uid;
-
-    const userRef = doc(db, "users", uid);
-    const snap = await getDoc(userRef);
-
-    if(!snap.exists()) {
-        throw new Error("Brukeren er ikke registrert som ansatt i denne barnehagen");
-    }
-
-    return {
-        uid,
-        ...snap.data(),
-    };*/}

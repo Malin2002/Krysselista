@@ -127,9 +127,6 @@ export default function ChildProfile() {
                         <Text style={styles.logoutButtonText}>Logg ut</Text>
                     </TouchableOpacity>
                     <Text style={styles.headerTitle}>{child.name}</Text>
-                    {/*<TouchableOpacity onPress={() => setMenuVisible(true)}>
-                        <FontAwesome5 name="plus" size={24} color="black" />
-                    </TouchableOpacity>*/}
                 </View>
             )}
             <Modal
@@ -456,44 +453,3 @@ const styles = StyleSheet.create({
         marginRight: 8,
     },
 });
-
-
-
-{/*
-    useEffect(() => {
-        if (!childId) return;
-        
-        (async () => {
-            const docSnap = await getDoc(doc(db, "children", childId));
-            if(!docSnap.exists()) return;
-
-            const data = docSnap.data() as Child;
-
-            let imageUrl: string | undefined = undefined;
-            if(data.imageUrl) {
-                try {
-                    imageUrl = await getDownloadUrl(data.imageUrl);
-                } catch (e) {
-                    console.log("Feil ved henting av bilde:", e);
-                }
-            }
-
-            let galleryUrls: string[] = [];
-            if(data.gallery && data.gallery.length > 0) {
-                const urls = await Promise.all(
-                    data.gallery.map(async (path) => {
-                        try {
-                            return await getDownloadUrl(path);
-                        } catch {
-                            return "";
-                        }
-                    })
-                );
-                galleryUrls = urls.filter(Boolean);
-            }
-
-            setChild({ ...data, imageUrl, gallery: galleryUrls });
-            setLoading(false);
-        })();
-    }, [childId]);
-     */}

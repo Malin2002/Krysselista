@@ -255,8 +255,3 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   }
 });
-
-// Mørk grønn: #546856
-//Mørk blå: #6B85A5
-//Lys grønn: #DDF3DF
-//Lys blå: #E2EDFB / #CBDAED

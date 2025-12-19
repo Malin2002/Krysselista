@@ -13,7 +13,6 @@ import {
     orderBy,
     serverTimestamp,
     setDoc,
-    Timestamp,
 } from "firebase/firestore";
 
 //type for varsling
@@ -236,15 +235,3 @@ export async function addImage(
         });
     }
 }
-
-
-
-
-/*const varselRef = collection(db, "notifications");
-    await addDoc(varselRef, {
-        type: "statusEndring",
-        childId,
-        text: `Status endret til ${status}`,
-        userId: performedBy,
-        timestamp: serverTimestamp(),
-    });*/
